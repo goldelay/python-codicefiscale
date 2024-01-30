@@ -5,9 +5,21 @@ from typing import Any
 
 import fsutil
 
+import sys, os
+
+
+def get_temp_dir():
+    if getattr(sys, 'frozen', False):
+        # Se l'applicazione è un eseguibile standalone
+        return os.path.dirname(sys.executable)
+    else:
+        # Se l'applicazione è eseguita come script Python
+        return os.path.dirname(os.path.abspath(__file__))
+
 
 def get_data(filename: str) -> Any:
-    return fsutil.read_file_json(fsutil.join_path(__file__, f"data/{filename}"))
+    return fsutil.read_file_json(fsutil.join_path(get_temp_dir(), f"data/{filename}")) #copy folder "data/" and all 'files'.json in root of DIST folder EXE and play enjoy!
+    #return fsutil.read_file_json(fsutil.join_path(__file__, f"data/{filename}"))
 
 
 def get_municipalities_data() -> Any:
